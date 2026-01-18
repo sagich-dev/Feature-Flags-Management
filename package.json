@@ -1,0 +1,26 @@
+{
+	"name": "feature-flags",
+	"version": "1.0.0",
+	"private": true,
+	"description": "Feature Flags Management System",
+	"packageManager": "pnpm@10.14.0",
+	"engines": {
+		"node": ">=20.6.0",
+		"pnpm": ">=10.0.0"
+	},
+	"scripts": {
+		"dev": "pnpm -r --parallel run dev",
+		"dev:backend": "pnpm --filter @feature-flags/backend run start:dev",
+		"dev:frontend": "pnpm --filter @feature-flags/frontend run dev",
+		"build": "pnpm -r run build",
+		"build:backend": "pnpm --filter @feature-flags/backend run build",
+		"build:frontend": "pnpm --filter @feature-flags/frontend run build",
+		"lint": "biome check",
+		"lint:fix": "biome check --write",
+		"type-check": "pnpm -r run type-check",
+		"clean": "pnpm -r exec rm -rf node_modules dist .turbo && rm -rf node_modules"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.1.4"
+	}
+}

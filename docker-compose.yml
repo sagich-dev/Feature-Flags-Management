@@ -1,0 +1,60 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: packages/backend/Dockerfile.dev
+    container_name: moodify-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=development
+      - HOST=0.0.0.0
+      - PORT=8080
+      - CORS_ORIGIN=http://localhost:5173,http://frontend:5173
+      - TRUST_PROXY=true
+      - LOG_TIMEZONE=Asia/Jerusalem
+    volumes:
+      # Mount source code for hot-reloading (read-write for proper file watching)
+      - ./packages/backend/src:/app/packages/backend/src
+      - ./packages/backend/tsconfig.json:/app/packages/backend/tsconfig.json
+      - ./packages/backend/package.json:/app/packages/backend/package.json
+      # Exclude node_modules to use the ones in the container
+      - /app/packages/backend/node_modules
+    networks:
+      - moodify-network
+    healthcheck:
+      test: ["CMD", "node", "-e", "const http=require('http');const req=http.get('http://localhost:8080/api/health/liveness',(r)=>process.exit(r.statusCode===200?0:1));req.on('error',()=>process.exit(1));req.setTimeout(2000,()=>{req.destroy();process.exit(1);});"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+  frontend:
+    build:
+      context: .
+      dockerfile: packages/frontend/Dockerfile.dev
+    container_name: moodify-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE_URL=/api
+      - VITE_API_PROXY_TARGET=http://backend:8080
+    volumes:
+      # Mount source code for hot-reloading (read-write for proper file watching)
+      - ./packages/frontend/src:/app/packages/frontend/src
+      - ./packages/frontend/public:/app/packages/frontend/public
+      - ./packages/frontend/index.html:/app/packages/frontend/index.html
+      - ./packages/frontend/vite.config.ts:/app/packages/frontend/vite.config.ts
+      - ./packages/frontend/tsconfig.json:/app/packages/frontend/tsconfig.json
+      - ./packages/frontend/package.json:/app/packages/frontend/package.json
+      # Exclude node_modules to use the ones in the container
+      - /app/packages/frontend/node_modules
+    networks:
+      - moodify-network
+    depends_on:
+      backend:
+        condition: service_healthy
+
+networks:
+  moodify-network:
+    driver: bridge
