@@ -1,15 +1,27 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "@/app/App";
+import "@/app/style.css";
 
-const rootElement = document.getElementById("root");
-if (!rootElement) {
-	throw new Error("Root element not found");
+async function start() {
+	const rootElement = document.getElementById("root");
+	if (!rootElement) {
+		throw new Error("Root element not found");
+	}
+
+	if (import.meta.env.DEV) {
+		const { worker } = await import("@/mocks/browser");
+		await worker.start({
+			onUnhandledRequest: "warn",
+		});
+	}
+
+	const root = ReactDOM.createRoot(rootElement);
+	root.render(
+		<React.StrictMode>
+			<App />
+		</React.StrictMode>
+	);
 }
 
-const root = ReactDOM.createRoot(rootElement);
-root.render(
-	<React.StrictMode>
-		<App />
-	</React.StrictMode>
-);
+start();

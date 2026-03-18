@@ -1,39 +1,27 @@
-import { Box, CircularProgress } from "@mui/material";
-import { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import DashboardLayout from "@/layouts/DashboardLayout/index";
+import DemoPage from "@/app/pages/DemoPage";
 
-const FlagsDashboard = lazy(() => import("@/features/flags/components/FlagsDashboard"));
-
-const ROUTES = {
+export const ROUTES = {
 	ROOT: "/",
+	NOT_FOUND: "*",
 } as const;
 
-function LoadingFallback() {
+function NotFoundPage() {
 	return (
-		<Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
-			<CircularProgress />
-		</Box>
+		<div style={{ padding: 24 }}>
+			<h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 12 }}>Page not found</h1>
+			<p>The page you are looking for does not exist.</p>
+		</div>
 	);
 }
 
-function AllRoutes() {
+export default function AppRoutes() {
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route path={ROUTES.ROOT} element={<DashboardLayout />}>
-					<Route
-						index
-						element={
-							<Suspense fallback={<LoadingFallback />}>
-								<FlagsDashboard />
-							</Suspense>
-						}
-					/>
-				</Route>
+				<Route path={ROUTES.ROOT} element={<DemoPage />} />
+				<Route path={ROUTES.NOT_FOUND} element={<NotFoundPage />} />
 			</Routes>
 		</BrowserRouter>
 	);
 }
-
-export default AllRoutes;
