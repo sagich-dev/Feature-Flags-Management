@@ -21,7 +21,6 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 	}
 
 	override componentDidCatch(error: Error, errorInfo: unknown) {
-		// In a real app, send this to an error reporting service.
 		console.error("Unhandled error", error, errorInfo);
 	}
 

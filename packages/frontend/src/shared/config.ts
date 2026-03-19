@@ -11,6 +11,9 @@ export interface AppConfig {
     staleTime: number;
     gcTime: number;
   };
+  api: {
+    timeout: number;
+  };
 }
 
 /**
@@ -35,6 +38,9 @@ export function createConfig(): AppConfig {
     cache: {
       staleTime: 1000 * 60 * 5, // 5 minutes
       gcTime: 1000 * 60 * 10, // 10 minutes
+    },
+    api: {
+      timeout: Number(getEnvVar("VITE_API_TIMEOUT", "10000")),
     },
   };
 }

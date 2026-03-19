@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
+import axios, { type AxiosError, type AxiosResponse, type InternalAxiosRequestConfig } from "axios";
 import { config } from "@/shared/config";
 
 export interface ApiErrorDetails {
@@ -9,9 +9,9 @@ export interface ApiErrorDetails {
 }
 
 export class ApiError extends Error {
-	public readonly status?: number | undefined;
-	public readonly code?: string | undefined;
-	public readonly cause?: unknown;
+	public readonly status: number | undefined;
+	public readonly code: string | undefined;
+	public readonly cause: unknown;
 
 	constructor(message: string, opts?: ApiErrorDetails) {
 		super(message);
@@ -30,17 +30,39 @@ export function isApiError(value: unknown): value is ApiError {
 	return value instanceof ApiError;
 }
 
-export function createApiClient(): AxiosInstance {
+/**
+ * Request interceptor configuration
+ */
+export type RequestInterceptor = (config: InternalAxiosRequestConfig) => InternalAxiosRequestConfig | Promise<InternalAxiosRequestConfig>;
+
+let requestInterceptors: RequestInterceptor[] = [];
+
+/**
+ * Register a request interceptor
+ */
+export function addRequestInterceptor(interceptor: RequestInterceptor): void {
+	requestInterceptors.push(interceptor);
+}
+
+function createApiClient() {
 	const client = axios.create({
 		baseURL: config.apiUrl,
-		timeout: 10_000,
+		timeout: config.api.timeout,
 		headers: {
 			Accept: "application/json",
 			"Content-Type": "application/json",
 		},
 	});
 
-	// Simple error handling
+	// Apply request interceptors
+	client.interceptors.request.use(async (requestConfig) => {
+		let finalConfig = requestConfig;
+		for (const interceptor of requestInterceptors) {
+			finalConfig = await interceptor(finalConfig);
+		}
+		return finalConfig;
+	});
+
 	client.interceptors.response.use(
 		(response: AxiosResponse) => response,
 		(error: AxiosError) => {

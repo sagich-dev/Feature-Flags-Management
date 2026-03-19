@@ -1,0 +1,7 @@
+.container {
+	background: #0b1220;
+	color: #e5e7eb;
+	padding: 12px;
+	border-radius: 8px;
+	overflow: auto;
+}

@@ -1,69 +1,39 @@
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+import { ErrorMessage } from "@/components/ui/ErrorMessage";
+import { CodeBlock } from "@/components/ui/CodeBlock";
 import { useDemoQuery, useHealthQuery } from "@/shared/api/demo.queries";
+import styles from "./DemoPage.module.css";
 
 export default function DemoPage() {
 	const health = useHealthQuery();
 	const demo = useDemoQuery();
 
-	const renderStatus = (status: "loading" | "error" | "success", message?: string) => {
-		switch (status) {
-			case "loading":
-				return (
-					<output aria-live="polite" style={{ display: "flex", alignItems: "center", gap: 8 }}>
-						<div
-							style={{
-								width: 16,
-								height: 16,
-								border: "2px solid #e5e7eb",
-								borderTop: "2px solid #3b82f6",
-								borderRadius: "50%",
-								animation: "spin 1s linear infinite",
-							}}
-						/>
-						<span>Loading…</span>
-					</output>
-				);
-			case "error":
-				return (
-					<div role="alert" style={{ color: "#b91c1c", display: "flex", alignItems: "center", gap: 8 }}>
-						<span>⚠️</span>
-						<span>{message || "An error occurred"}</span>
-					</div>
-				);
-			case "success":
-				return null;
-		}
-	};
-
 	return (
-		<main style={{ padding: 24, fontFamily: "system-ui, sans-serif" }}>
-			<h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 12 }}>Frontend Demo</h1>
-			<p style={{ marginBottom: 24, opacity: 0.85 }}>
+		<main className={styles.page}>
+			<h1 className={styles.title}>Frontend Demo</h1>
+			<p className={styles.description}>
 				This page demonstrates frontend ↔ backend communication with MSW mocks.
 			</p>
 
-			<section style={{ marginBottom: 24 }}>
-				<h2 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8 }}>GET /api/health</h2>
+			<section className={styles.section}>
+				<h2 className={styles.sectionTitle}>GET /api/health</h2>
 				{health.isLoading ? (
-					renderStatus("loading")
+					<LoadingSpinner />
 				) : health.isError ? (
-					renderStatus("error", health.error instanceof Error ? health.error.message : "Error")
+					<ErrorMessage message={health.error instanceof Error ? health.error.message : "Error"} />
 				) : (
-					<pre style={{ background: "#0b1220", color: "#e5e7eb", padding: 12, borderRadius: 8, overflow: "auto" }}>
-						{JSON.stringify(health.data, null, 2)}
-					</pre>
+					<CodeBlock>{JSON.stringify(health.data, null, 2)}</CodeBlock>
 				)}
 			</section>
 
-			<section>
-				<h2 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8 }}>GET /api/example</h2>
+			<section className={styles.section}>
+				<h2 className={styles.sectionTitle}>GET /api/example</h2>
 				{demo.isLoading ? (
-					renderStatus("loading")
+					<LoadingSpinner />
 				) : demo.isError ? (
-					renderStatus("error", demo.error instanceof Error ? demo.error.message : "Error")
+					<ErrorMessage message={demo.error instanceof Error ? demo.error.message : "Error"} />
 				) : (
-					<pre style={{ background: "#0b1220", color: "#e5e7eb", padding: 12, borderRadius: 8, overflow: "auto" }}>
-						{JSON.stringify(demo.data, null, 2)}
-					</pre>
+					<CodeBlock>{JSON.stringify(demo.data, null, 2)}</CodeBlock>
 				)}
 			</section>
 		</main>

@@ -1,16 +1,6 @@
 import { http } from "@/shared/api/http";
+import type { ExampleResponse, HealthResponse } from "@/shared/api/schemas";
 import { exampleResponseSchema, healthResponseSchema } from "@/shared/api/schemas";
-
-export interface HealthResponse {
-	ok: boolean;
-	service: string;
-	time: string;
-}
-
-export interface ExampleResponse {
-	message: string;
-	requestId: string;
-}
 
 export async function getHealth(): Promise<HealthResponse> {
 	const res = await http.get("/health");
