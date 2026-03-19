@@ -28,10 +28,15 @@
 				"noAssignInExpressions": "error"
 			},
 			"style": {
-				"useNodejsImportProtocol": "error"
+				"useNodejsImportProtocol": "error",
+				"noUnusedTemplateLiteral": "warn"
 			},
 			"correctness": {
-				"noUnusedVariables": "error"
+				"noUnusedVariables": "error",
+				"noUnusedImports": "error"
+			},
+			"performance": {
+				"noDelete": "warn"
 			}
 		}
 	},

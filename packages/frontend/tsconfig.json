@@ -17,46 +17,25 @@
 			"@/*": ["./src/*"]
 		},
 
-		/* JavaScript Support */
-		"allowJs": false,
-
 		/* Type Checking */
 		"strict": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
-		"noFallthroughCasesInSwitch": true,
-		"noImplicitOverride": true,
-		"noImplicitReturns": true,
-		"noPropertyAccessFromIndexSignature": true,
-		"noUncheckedIndexedAccess": true,
-		"noImplicitAny": true,
 		"exactOptionalPropertyTypes": true,
-		"noImplicitThis": true,
-		"strictBindCallApply": true,
-		"strictFunctionTypes": true,
-		"strictNullChecks": true,
-		"strictPropertyInitialization": true,
 
 		/* Completeness */
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true,
 
-		/* Emit */
-		"outDir": "./dist",
-		"rootDir": "./",
-
 		/* Interop Constraints */
 		"allowSyntheticDefaultImports": true,
 		"esModuleInterop": true,
-		"allowUmdGlobalAccess": false,
 
 		/* Advanced */
-		"noImplicitUseStrict": false,
 		"useDefineForClassFields": true
 	},
 	"include": [
 		"src/**/*",
-		"vite.config.ts",
 		"src/types/**/*.d.ts"
 	],
 	"exclude": [

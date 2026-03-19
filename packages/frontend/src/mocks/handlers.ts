@@ -11,10 +11,7 @@ export const handlers = [
 	}),
 	http.get("/api/example", async () => {
 		await delay(200);
-		const requestId =
-			typeof globalThis.crypto !== "undefined" && typeof globalThis.crypto.randomUUID === "function"
-				? globalThis.crypto.randomUUID()
-				: `req_${Date.now()}`;
+		const requestId = crypto.randomUUID();
 		return HttpResponse.json({
 			message: "Hello from MSW",
 			requestId,
