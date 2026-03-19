@@ -4,38 +4,80 @@ export default function DemoPage() {
 	const health = useHealthQuery();
 	const demo = useDemoQuery();
 
+	const renderStatus = (status: "loading" | "error" | "success", message?: string) => {
+		switch (status) {
+			case "loading":
+				return (
+					<div role="status" aria-live="polite" style={{ display: "flex", alignItems: "center", gap: 8 }}>
+						<div
+							style={{
+								width: 16,
+								height: 16,
+								border: "2px solid #e5e7eb",
+								borderTop: "2px solid #3b82f6",
+								borderRadius: "50%",
+								animation: "spin 1s linear infinite",
+							}}
+						/>
+						<span>Loading…</span>
+					</div>
+				);
+			case "error":
+				return (
+					<div role="alert" style={{ color: "#b91c1c", display: "flex", alignItems: "center", gap: 8 }}>
+						<span>⚠️</span>
+						<span>{message || "An error occurred"}</span>
+					</div>
+				);
+			case "success":
+				return null;
+		}
+	};
+
 	return (
-		<div style={{ padding: 24, fontFamily: "Plus Jakarta Sans, system-ui, sans-serif" }}>
+		<main style={{ padding: 24, fontFamily: "Plus Jakarta Sans, system-ui, sans-serif" }}>
 			<h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 12 }}>Frontend boilerplate</h1>
 			<p style={{ marginBottom: 24, opacity: 0.85 }}>
 				This page demonstrates frontend ↔ backend communication. In dev/tests, MSW will mock these endpoints.
 			</p>
 
-			<section style={{ marginBottom: 24 }}>
-				<h2 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8 }}>GET /api/health</h2>
+			<section style={{ marginBottom: 24 }} aria-labelledby="health-section-title">
+				<h2 id="health-section-title" style={{ fontSize: 16, fontWeight: 700, marginBottom: 8 }}>
+					GET /api/health
+				</h2>
 				{health.isLoading ? (
-					<p>Loading…</p>
+					renderStatus("loading")
 				) : health.isError ? (
-					<p style={{ color: "#b91c1c" }}>{health.error instanceof Error ? health.error.message : "Error"}</p>
+					renderStatus("error", health.error instanceof Error ? health.error.message : "Error")
 				) : (
-					<pre style={{ background: "#0b1220", color: "#e5e7eb", padding: 12, borderRadius: 8 }}>
+					<pre
+						role="region"
+						aria-label="Health response data"
+						style={{ background: "#0b1220", color: "#e5e7eb", padding: 12, borderRadius: 8, overflow: "auto" }}
+					>
 						{JSON.stringify(health.data, null, 2)}
 					</pre>
 				)}
 			</section>
 
-			<section>
-				<h2 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8 }}>GET /api/example</h2>
+			<section aria-labelledby="demo-section-title">
+				<h2 id="demo-section-title" style={{ fontSize: 16, fontWeight: 700, marginBottom: 8 }}>
+					GET /api/example
+				</h2>
 				{demo.isLoading ? (
-					<p>Loading…</p>
+					renderStatus("loading")
 				) : demo.isError ? (
-					<p style={{ color: "#b91c1c" }}>{demo.error instanceof Error ? demo.error.message : "Error"}</p>
+					renderStatus("error", demo.error instanceof Error ? demo.error.message : "Error")
 				) : (
-					<pre style={{ background: "#0b1220", color: "#e5e7eb", padding: 12, borderRadius: 8 }}>
+					<pre
+						role="region"
+						aria-label="Example response data"
+						style={{ background: "#0b1220", color: "#e5e7eb", padding: 12, borderRadius: 8, overflow: "auto" }}
+					>
 						{JSON.stringify(demo.data, null, 2)}
 					</pre>
 				)}
 			</section>
-		</div>
+		</main>
 	);
 }

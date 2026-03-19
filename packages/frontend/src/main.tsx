@@ -24,4 +24,6 @@ async function start() {
 	);
 }
 
-start();
+start().catch((error) => {
+	console.error("Failed to start application:", error);
+});

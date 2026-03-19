@@ -1,13 +1,9 @@
 {
 	"compilerOptions": {
+		/* Language and Environment */
 		"target": "ES2020",
-		"useDefineForClassFields": true,
 		"lib": ["ES2021", "DOM", "DOM.Iterable"],
 		"module": "ESNext",
-		"skipLibCheck": true,
-		"esModuleInterop": true,
-
-		/* Bundler mode */
 		"moduleResolution": "bundler",
 		"allowImportingTsExtensions": true,
 		"resolveJsonModule": true,
@@ -15,7 +11,16 @@
 		"noEmit": true,
 		"jsx": "react-jsx",
 
-		/* Linting */
+		/* Modules */
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["./src/*"]
+		},
+
+		/* JavaScript Support */
+		"allowJs": false,
+
+		/* Type Checking */
 		"strict": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
@@ -29,15 +34,31 @@
 		"noImplicitThis": true,
 		"strictBindCallApply": true,
 		"strictFunctionTypes": true,
+		"strictNullChecks": true,
 		"strictPropertyInitialization": true,
 
-		/* Paths */
-		"baseUrl": ".",
-		"paths": {
-			"@/*": ["./src/*"]
-		}
+		/* Completeness */
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+
+		/* Emit */
+		"outDir": "./dist",
+		"rootDir": "./",
+
+		/* Interop Constraints */
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"allowUmdGlobalAccess": false,
+
+		/* Advanced */
+		"noImplicitUseStrict": false,
+		"useDefineForClassFields": true
 	},
-	"include": ["src", "vite.config.ts"],
+	"include": [
+		"src/**/*",
+		"vite.config.ts",
+		"src/types/**/*.d.ts"
+	],
 	"exclude": [
 		"node_modules",
 		"dist",
@@ -46,6 +67,7 @@
 		"**/*.test.tsx",
 		"**/*.spec.ts",
 		"**/*.spec.tsx",
-		"**/__tests__/**"
+		"**/__tests__/**",
+		"**/node_modules/**"
 	]
 }

@@ -11,8 +11,29 @@ export default defineConfig(() => ({
 			"@": path.resolve(__dirname, "./src"),
 		},
 	},
+	server: {
+		port: 3000,
+		host: true,
+	},
+	build: {
+		target: "esnext",
+		sourcemap: true,
+	},
 	test: {
 		environment: "jsdom",
 		setupFiles: ["./src/test/setup.ts"],
+		globals: true,
+		coverage: {
+			provider: "v8" as const,
+			reporter: ["text", "json", "html"],
+			include: ["src/**/*.{ts,tsx}"],
+			exclude: [
+				"src/**/*.d.ts",
+				"src/**/*.test.{ts,tsx}",
+				"src/**/*.spec.{ts,tsx}",
+				"src/test/**",
+				"src/vite-env.d.ts",
+			],
+		},
 	},
 }));
